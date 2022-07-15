@@ -69,6 +69,7 @@ while True:
             if node.id < neighbor.id and random.random() < settings.Y:
                 total_cost += node.checkout_node(neighbor)
                 total_cost += neighbor.checkout_node(node)
+
     current_created = settings.X * (time_stamp + 1) * (settings.NUMBER_OF_NODES - 1)
     current_received = sum(nodes[0].first_not_received)
     print(time_stamp, current_created, current_received, '{:.2f}%'.format(current_received * 100 / current_created),
