@@ -9,4 +9,5 @@ A simple simulation for how buses can transmit their offline data and delivering
 Documentation is available in the code.
 
 ## Future works
+* Visualize.
 * Adding a feature to control the tradeoff between speed of delivery and size of transmitted data.  
