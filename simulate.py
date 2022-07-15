@@ -8,9 +8,30 @@ random.seed(0)
 
 nodes: List[Node] = [Center()] + [Node() for i in range(settings.NUMBER_OF_NODES - 1)]
 
-'''
-'''
+
+def make_graph():
+    for i in range(len(nodes)):
+        nodes[i].id = i
+
+    while True:
+        need_neighbor = list(filter(lambda node: len(node.neighbors) < settings.NUMBER_OF_NEIGHBORS, nodes[1:]))
+        if len(need_neighbor) < 2:
+            break
+        v, u = random.sample(need_neighbor, 2)
+        if u not in v.neighbors:
+            v.neighbors.append(u)
+            u.neighbors.append(v)
+
+    for bus in random.sample(nodes[1:], settings.NUMBER_OF_CENTER_NEIGHBORS):
+        bus.neighbors.append(nodes[0])
+        nodes[0].neighbors.append(bus)
+
+
 def calculate_distances():
+    """
+    Runs bfs and calculate the shortest distance of every node to the center.
+    Also calculates node.parent which is the parent in bfs-tree.
+    """
     bfs_queue: Deque[Node] = deque()
     bfs_queue.append(nodes[0])
     nodes[0].distance = 0
@@ -23,27 +44,20 @@ def calculate_distances():
                 bfs_queue.append(neighbor)
 
 
-for i in range(len(nodes)):
-    nodes[i].id = i
+def remove_unnecessary_neighbors():
+    """
+    Removes unnecessary neighbors (e.g. who are not in bfs-tree) from the neighbors.
+    """
+    print('Reduced number of neighbors from', sum(len(x.neighbors) for x in nodes), end='')
+    calculate_distances()
+    for v in nodes:
+        v.neighbors = list(filter(lambda neighbor: neighbor.parent == v or v.parent == neighbor, v.neighbors))
+    print(' to', sum(len(x.neighbors) for x in nodes))
 
-while True:
-    need_neighbor = list(filter(lambda node: len(node.neighbors) < settings.NUMBER_OF_NEIGHBORS, nodes[1:]))
-    if len(need_neighbor) < 2:
-        break
-    v, u = random.sample(need_neighbor, 2)
-    if u not in v.neighbors:
-        v.neighbors.append(u)
-        u.neighbors.append(v)
 
-for bus in random.sample(nodes[1:], settings.NUMBER_OF_CENTER_NEIGHBORS):
-    bus.neighbors.append(nodes[0])
-    nodes[0].neighbors.append(bus)
+make_graph()
+remove_unnecessary_neighbors()
 
-print(sum(len(x.neighbors) for x in nodes))
-calculate_distances()
-for v in nodes:
-    v.neighbors = list(filter(lambda neighbor: neighbor.parent == v or v.parent == neighbor, v.neighbors))
-print(sum(len(x.neighbors) for x in nodes))
 time_stamp = 0
 total_cost = 0
 while True:

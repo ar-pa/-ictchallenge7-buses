@@ -13,13 +13,15 @@ class Node:
         self.parent: Node = None
         self.distance = settings.INF
 
-    def add_transaction(self, number_of_new_transactions=1):
+    def add_transaction(self, number_of_new_transactions=1) -> None:
         self.first_not_received[self.id] += number_of_new_transactions
 
-    '''
-    :param distance 
-    '''
-    def checkout_node(self, neighbor_node: 'Node'):
+    def checkout_node(self, neighbor_node: 'Node') -> int:
+        """
+        Updates the current node from the neighbor_node.
+        :param neighbor_node: The neighbor node to update from.
+        :return: The cost -- i.e. number of transactions transmitted.
+        """
         cost = 0
         for i in range(settings.NUMBER_OF_NODES):
             if isinstance(neighbor_node, Center):
