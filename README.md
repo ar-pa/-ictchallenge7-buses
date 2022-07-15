@@ -10,4 +10,6 @@ Documentation is available in the code.
 
 ## Future works
 * Visualize.
-* Adding a feature to control the tradeoff between speed of delivery and size of transmitted data.  
+* Adding a feature to control the tradeoff between speed of delivery and size of transmitted data.
+Note that if we use all the edges, delivery will be faster, but we transmit a lot of data.
+19G transaction transmitted in a sample, shows that almost every packet arrived almost every bus.
